@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: joomla-service
+  namespace: joomla
+  labels:
+    app: joomla
+    type: frontend
+spec:
+  selector:
+    app: joomla
+    type: frontend
+  ports:
+  - name: http-sv-port 
+    port: 80
+    targetPort: http-port
+  - name: https-sv-port
+    port: 443
+    targetPort: https-port
+  type: NodePort 

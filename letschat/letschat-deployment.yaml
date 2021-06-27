@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: letschat
+  labels:
+    name: letschat
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      name: letschat
+  template:
+    metadata:
+      labels:
+        name: letschat
+    spec:
+      containers:
+      - name: letschat
+        image: localhost:32000/chat-app-zrl:latest
+        ports:
+          - name: http-server
+            containerPort: 3000

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-service
+  namespace: joomla
+  labels:
+    app: joomla
+    type: database
+spec:
+  selector:
+    app: joomla
+    type: database
+  ports:
+  - port: 3306
+    targetPort: db-port
+  type: ClusterIP 

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+  namespace: joomla
+  labels:
+    app: joomla
+    type: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joomla
+      tier: mariadb
+  template:
+    metadata:
+      labels:
+        app: joomla
+        tier: mariadb
+        type: database
+    spec:
+      containers:
+        - name: joomla
+          image: localhost:32000/mymariadb
+          ports:
+            - containerPort: 3306
+              name: db-port
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret2
+                  key: dbuser
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret2
+                  key: dbname
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                   name: mariadb-secret2
+                   key: dbrootpassword
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret2
+                  key: dbpassword
+          volumeMounts:
+            - name: mariadb-vol
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-vol
+          persistentVolumeClaim:
+            claimName: mariadb-pvc

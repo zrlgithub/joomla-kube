@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: joomla-ingress
+  namespace: joomla
+  labels:
+    app: joomla
+    type: frontend
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: wp.172.22.200.178.nip.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: joomla-service
+          servicePort: http-sv-port

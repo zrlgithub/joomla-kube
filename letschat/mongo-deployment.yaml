@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mongo
+  template:
+    metadata:
+      labels:
+        name: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: localhost:32000/mymariadb
+        env:
+            # Use secret in real usage
+           - name: MARIADB_ALLOW_EMPTY_ROOT_PASSWORD
+             value: allow 
+        ports:
+          - name: mongo
+            containerPort: 3306
+        volumeMounts:
+            - name: chat-vol
+              mountPath: /var/lib/mysql
+      volumes:
+      - name: chat-vol
+        persistentVolumeClaim:
+          claimName: chat-pvc

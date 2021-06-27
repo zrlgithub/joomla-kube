@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joomla-deployment
+  namespace: joomla  
+  labels:
+    app: joomla
+    type: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: joomla
+      type: frontend
+  template:
+    metadata:
+      labels:
+        app: joomla
+        type: frontend
+    spec:
+      containers:
+        - name: joomla
+          image: localhost:32000/myjoomla
+          ports:
+            - containerPort: 80
+              name: http-port
+            - containerPort: 443
+              name: https-port
+          env:
+            - name: JOOMLA_DB_HOST
+              value: mariadb-service
+            - name: JOOMLA_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret2
+                  key: dbuser
+            - name: JOOMLA_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret2
+                  key: dbpassword
+            - name: JOOMLA_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret2
+                  key: dbname
+          volumeMounts:
+            - name: joomla-vol
+              mountPath: /var/www/html
+      volumes:
+        - name: joomla-vol
+          persistentVolumeClaim:
+            claimName: joomla-pvc
