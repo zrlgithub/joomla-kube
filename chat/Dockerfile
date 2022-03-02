@@ -1,4 +1,4 @@
-FROM node:16.9.0
+FROM node:16.13.2
 
 WORKDIR /home/student/chat
 COPY package*.json ./
