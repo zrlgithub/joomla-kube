@@ -1,4 +1,4 @@
-FROM node:16.9.0
+FROM node:gallium-buster
 
 WORKDIR /home/student/chat
 COPY package*.json ./
